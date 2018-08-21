@@ -36,6 +36,7 @@ class RageEmailExtension extends Extension
     {
         $optionId = sprintf('rage_email.%s.sender', $alias);
         $optionDef = new Definition($container->getParameter('rage_email.sender.class'));
+        $optionDef->setPublic(true);
         $optionDef->addMethodCall('setEventDispatcher', [ new Reference('event_dispatcher') ]);
         $optionDef->addMethodCall('setPrimaryMailer', [ new Reference(!empty($options['mailer']) ? $options['mailer'] : 'mailer') ]);
         if (!empty($options['mailer_fallback'])) {
@@ -49,6 +50,7 @@ class RageEmailExtension extends Extension
         $optionId = sprintf('rage_email.%s.config', $alias);
         $optionDef = new Definition($container->getParameter('rage_email.config.class'));
         // Dependency references
+        $optionDef->setPublic(true);
         $optionDef->addMethodCall('setTemplateEngine', [ new Reference('templating') ]);
         $optionDef->addMethodCall('setTemplateLocator', [ new Reference('templating.locator') ]);
         $optionDef->addMethodCall('setTemplateNameParser', [ new Reference('templating.name_parser') ]);
@@ -81,6 +83,7 @@ class RageEmailExtension extends Extension
         $optionId = sprintf('rage_email.%s.message', $alias);
         $optionDef = new Definition($container->getParameter('rage_email.message.class'));
         $optionDef->setShared(false);
+        $optionDef->setPublic(true);
         $optionDef->addMethodCall('setEventDispatcher', [ new Reference('event_dispatcher') ]);
         $optionDef->addMethodCall('setConfig', [ new Reference(sprintf('rage_email.%s.config', $alias)) ]);
         foreach ($senders as $sender) {
@@ -96,6 +99,7 @@ class RageEmailExtension extends Extension
     {
         $container->setParameter('rage_email.locale_config', $config);
         $optionDef = new Definition($container->getParameter('rage_email.locale_listener.class'));
+        $optionDef->setPublic(true);
         $optionDef->addArgument(new Reference('router.request_context'));
         $optionDef->addArgument(new Reference('translator'));
         $optionDef->addArgument(new Reference('stof_doctrine_extensions.listener.translatable', ContainerInterface::NULL_ON_INVALID_REFERENCE));
